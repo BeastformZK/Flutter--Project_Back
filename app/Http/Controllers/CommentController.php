@@ -13,8 +13,7 @@ class CommentController extends Controller
     {
         $post = Post::find($id);
 
-        if(!$post)
-        {
+        if (!$post) {
             return response([
                 'message' => 'Post not found.'
             ], 403);
@@ -30,8 +29,7 @@ class CommentController extends Controller
     {
         $post = Post::find($id);
 
-        if(!$post)
-        {
+        if (!$post) {
             return response([
                 'message' => 'Post not found.'
             ], 403);
@@ -58,15 +56,13 @@ class CommentController extends Controller
     {
         $comment = Comment::find($id);
 
-        if(!$comment)
-        {
+        if (!$comment) {
             return response([
                 'message' => 'Comment not found.'
             ], 403);
         }
 
-        if($comment->user_id != auth()->user()->id)
-        {
+        if ($comment->user_id != auth()->user()->id) {
             return response([
                 'message' => 'Permission denied.'
             ], 403);
@@ -91,15 +87,13 @@ class CommentController extends Controller
     {
         $comment = Comment::find($id);
 
-        if(!$comment)
-        {
+        if (!$comment) {
             return response([
                 'message' => 'Comment not found.'
             ], 403);
         }
 
-        if($comment->user_id != auth()->user()->id)
-        {
+        if ($comment->user_id != auth()->user()->id) {
             return response([
                 'message' => 'Permission denied.'
             ], 403);

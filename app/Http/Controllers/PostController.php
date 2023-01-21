@@ -13,11 +13,11 @@ class PostController extends Controller
     {
         return response([
             'posts' => Post::orderBy('created_at', 'desc')->with('user:id,name,image')->withCount('comments', 'likes')
-            ->with('likes', function($like){
-                return $like->where('user_id', auth()->user()->id)
-                    ->select('id', 'user_id', 'post_id')->get();
-            })
-            ->get()
+                ->with('likes', function ($like) {
+                    return $like->where('user_id', auth()->user()->id)
+                        ->select('id', 'user_id', 'post_id')->get();
+                })
+                ->get()
         ], 200);
     }
 
@@ -33,16 +33,22 @@ class PostController extends Controller
     public function store(Request $request)
     {
         //validate fields
-        $attrs = $request->validate([
-            'body' => 'required|string'
-        ]);
+        $attrs = $request->validate(
+            [
+                'title' => 'required|string',
+                'description' => 'required|string',
+            ],
+        );
+
 
         $image = $this->saveImage($request->image, 'posts');
 
+
         $post = Post::create([
-            'body' => $attrs['body'],
+            'title' => $attrs['title'],
             'user_id' => auth()->user()->id,
-            'image' => $image
+            'image' => $image,
+            'description' => $attrs['description'],
         ]);
 
         // for now skip for post image
@@ -58,28 +64,35 @@ class PostController extends Controller
     {
         $post = Post::find($id);
 
-        if(!$post)
-        {
+        if (!$post) {
             return response([
                 'message' => 'Post not found.'
             ], 403);
         }
 
-        if($post->user_id != auth()->user()->id)
-        {
+        if ($post->user_id != auth()->user()->id) {
             return response([
                 'message' => 'Permission denied.'
             ], 403);
         }
 
         //validate fields
-        $attrs = $request->validate([
-            'body' => 'required|string'
-        ]);
+        $attrs = $request->validate(
+            [
+                'title' => 'required|string',
+                'description' => 'required|string'
+            ],
+        );
 
-        $post->update([
-            'body' =>  $attrs['body']
-        ]);
+
+
+        $post->update(
+            [
+                'title' => $attrs['title'],
+                'description' => $attrs['description']
+            ],
+        );
+
 
         // for now skip for post image
 
@@ -94,15 +107,13 @@ class PostController extends Controller
     {
         $post = Post::find($id);
 
-        if(!$post)
-        {
+        if (!$post) {
             return response([
                 'message' => 'Post not found.'
             ], 403);
         }
 
-        if($post->user_id != auth()->user()->id)
-        {
+        if ($post->user_id != auth()->user()->id) {
             return response([
                 'message' => 'Permission denied.'
             ], 403);

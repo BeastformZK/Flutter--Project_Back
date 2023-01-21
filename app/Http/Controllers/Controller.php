@@ -14,17 +14,16 @@ class Controller extends BaseController
 
     public function saveImage($image, $path = 'public')
     {
-        if(!$image)
-        {
+        if (!$image) {
             return null;
         }
 
-        $filename = time().'.png';
+        $filename = time() . '.png';
         // save image
         \Storage::disk($path)->put($filename, base64_decode($image));
 
         //return the path
         // Url is the base url exp: localhost:8000
-        return URL::to('/').'/storage/'.$path.'/'.$filename;
+        return URL::to('/') . '/storage/' . $path . '/' . $filename;
     }
 }
