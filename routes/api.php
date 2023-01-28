@@ -18,11 +18,11 @@ use App\Http\Controllers\LikeController;
 |
 */
 
-// Public routes
+// Public routes Register
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Protected Routes
+// Protected Routes Sanctum
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // User
